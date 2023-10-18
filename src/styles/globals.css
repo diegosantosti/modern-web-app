@@ -105,3 +105,16 @@ a {
     color-scheme: dark;
   }
 }
+
+h2{
+  margin-bottom: 40px;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 6rem;
+  min-height: 100vh;
+}
