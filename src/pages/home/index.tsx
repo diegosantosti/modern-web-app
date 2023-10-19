@@ -1,40 +1,61 @@
-import Head from "next/head"
-import styles from './styles.module.css'
-import { useRouter } from "next/navigation"
-import React from "react"
-import { User } from "@/model/user"
-import { userService } from "@/services/user.service"
-import UserList from "@/components/user-list"
+import React from 'react'
+import Head from 'next/head'
 
-export default function HomePage(){
+import styles from './styles.module.css'
+import { useRouter } from 'next/navigation'
+import { User } from '@/model/user'
+import { userService } from '@/services/user.service'
+import UserList from '@/components/user-list'
+import { authService } from '@/services/auth.service'
+
+export default function HomePage() {
 
     const router = useRouter()
+
     const [ users, setUsers ] = React.useState<User[]>([])
 
-    function goToUser(){
-        router.push('user')
-    }
-
-    function fetchUsers(){
-        userService.getList().then(list => setUsers(list))
-    }
-
-    // Para não entrar em loop infinito de atualização da página
     React.useEffect(fetchUsers, [])
 
-    return(
-        <>
-            <Head> 
-                <title>Home Page</title> 
-            </Head>
+    function goToUser() {
+        router.push('/user/0')
+    }
 
+    function treat(error: any) {
+        if (authService.isUnauthorized(error)) {
+            router.replace('login')
+        } else {
+            alert(error.message)
+        }
+    }
+
+    function fetchUsers() {
+        userService.getList()
+            .then(list => setUsers(list))
+            .catch(treat)
+    }
+
+    function edit(id: number) {
+        router.push(`/user/${id}`)
+    }
+
+    function remove(id: number) {
+        userService.remove(id)
+            .then(removed => fetchUsers())
+            .catch(treat)
+    }
+
+    return (
+        <>
+            <Head>
+                <title>Home Page</title>
+            </Head>
             <main>
                 <div className={styles.homeHeader}>
                     <div>
                         <button onClick={() => router.replace('login')} >Sair</button>
                     </div>
 
-                    <h3>Listagem de usuários</h3>
+                    <h3>Listagem de Usuários</h3>
 
                     <div>
                         <button onClick={goToUser}>Add</button>
@@ -42,11 +63,10 @@ export default function HomePage(){
                 </div>
 
                 <div className={styles.homeMain}>
-                    <UserList users={users}/>
+                    <UserList users={users} edit={edit} remove={remove} />
                 </div>
 
             </main>
-      </>
-  
+        </>
     )
 }

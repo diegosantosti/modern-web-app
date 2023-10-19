@@ -4,6 +4,10 @@ class AuthService {
 
     private readonly url = 'http://localhost:3030/auth/login'
 
+    public isUnauthorized(error: any) {
+        return (error.message === 'Unauthorized')
+    }
+
     public getLoggedUser() {
         return authRepository.getLogged()
     }
@@ -15,7 +19,10 @@ class AuthService {
     public async login(username: string, password: string) {
         const response = await fetch(this.url, {
             method: 'POST',
-            headers: {'Content-Type': 'application/json',},
+            headers: {
+                'Content-Type': 'application/json',
+                // Add um atributo a mais nesse ponto do user.service
+            },
             body: JSON.stringify({ username, password })
         })
 
