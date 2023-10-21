@@ -52,7 +52,7 @@ export default function HomePage() {
             <main>
                 <div className={styles.homeHeader}>
                     <div>
-                        <button onClick={() => router.replace('login')} >Sair</button>
+                        <button onClick={() => router.replace('login')}>Sair</button>
                     </div>
 
                     <h3>Listagem de Usuários</h3>
@@ -60,6 +60,11 @@ export default function HomePage() {
                     <div>
                         <button onClick={goToUser}>Add</button>
                     </div>
+
+                </div>
+
+                <div className={styles.rolesButton}>
+                    <button onClick={() => router.replace('roles')}>Roles</button>
                 </div>
 
                 <div className={styles.homeMain}>

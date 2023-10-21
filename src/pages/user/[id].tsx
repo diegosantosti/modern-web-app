@@ -1,7 +1,7 @@
 import React from 'react'
 import Head from "next/head"
 
-import { useParams, useRouter, useSearchParams } from 'next/navigation'
+import { useParams, useRouter} from 'next/navigation'
 
 import MyInput from '../../components/input'
 import styles from './styles.module.css'

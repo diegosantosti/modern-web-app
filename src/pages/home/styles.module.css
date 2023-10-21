@@ -3,8 +3,18 @@
     display: flex;
     margin-bottom: 40px;
     justify-content: space-between;
+    padding: 5px;
 }
+
+.rolesButton {
+    display:flex;
+    width: 8%;
+    margin-left: 100%;
+}
+
 
 .homeMain {
     margin-top: 40px;
 }
+
+
