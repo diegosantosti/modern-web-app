@@ -8,6 +8,10 @@ import styles from './styles.module.css'
 import { userService } from '@/services/user.service'
 import { authService } from '@/services/auth.service'
 import { User } from '@/model/user'
+import roles from '../roles'
+import { Roles } from '@/model/roles'
+import { rolesService } from '@/services/roles.service'
+import RolesList from '@/components/roles-list'
 
 export default function UserPage() {
 
@@ -18,6 +22,7 @@ export default function UserPage() {
 
     const [id, setId] = React.useState(0)
     const [name, setName] = React.useState('')
+    const [roles,getList] = React.useState('')
     const [username, setUsername] = React.useState('')
     const [password, setPassword] = React.useState('')
     const [passConfirm, setPassConfirm] = React.useState('')
@@ -70,7 +75,7 @@ export default function UserPage() {
 
         try {
             if (id > 0) { // editar um usuário
-                let body = { name, username } as User
+                let body = { name, username, roles } as User
                 
                 if (password && password.trim() !== '') {
                     body = { ...body, password }
@@ -84,7 +89,9 @@ export default function UserPage() {
                     return
                 }
         
-                await userService.create({ name, username, password })
+                await userService.create({
+                    name, username, password, roles
+                })
                 router.back()
             }
         } catch (error: any) {
@@ -105,6 +112,16 @@ export default function UserPage() {
                         value={name}
                         onChange={event => setName(event.target.value)}
                     />
+                    <label>
+                        Roles:
+                        <select 
+                            name='SelectedRole'
+                            defaultValue={''}
+                            multiple={true}
+                        >
+                            <option value={roles}></option>
+                        </select> 
+                    </label>
                     <MyInput
                         label='Login'
                         value={username}
