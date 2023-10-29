@@ -16,6 +16,7 @@ export default function UserList({ users, edit, remove }: Props) {
                     <div key={user.id} className={styles.lineItem}>
                         <span className={styles.nameLabel}>{user.name}</span>
                         <span className={styles.usernameLabel}>{user.username}</span>
+                        <span className={styles.usernameLabel}>{ user.roles.map(role => ( role + ', ' )) }</span>
                         <div>
                             { edit && (
                                 <button

@@ -52,7 +52,7 @@ export default function RolesPage() {
             <main>
                 <div className={styles.homeHeader}>
                     <div>
-                        <button onClick={() => router.replace('home')}>Sair</button>
+                        <button onClick={() => router.replace('home')}>Voltar</button>
                     </div>
 
                     <h3>Listagem de Roles</h3>

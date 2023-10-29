@@ -12,6 +12,7 @@ import roles from '../roles'
 import { Roles } from '@/model/roles'
 import { rolesService } from '@/services/roles.service'
 import RolesList from '@/components/roles-list'
+import MySelect from '../../components/select-multiple'
 
 export default function UserPage() {
 
@@ -22,10 +23,18 @@ export default function UserPage() {
 
     const [id, setId] = React.useState(0)
     const [name, setName] = React.useState('')
-    const [roles,getList] = React.useState('')
+    const [roles,setRoles] = React.useState<string[]>([])
+    const [rolesLista,setRolesLista] = React.useState<Roles[]>([])
     const [username, setUsername] = React.useState('')
     const [password, setPassword] = React.useState('')
     const [passConfirm, setPassConfirm] = React.useState('')
+
+    React.useEffect(fetchRoles, [])
+    function fetchRoles() {
+        rolesService.getList()
+            .then(list => setRolesLista(list))
+            .catch(treat)
+    }
 
     React.useEffect(() => {
         const user = authService.getLoggedUser()
@@ -44,6 +53,7 @@ export default function UserPage() {
             userService.get(id).then(user => {
                 setName(user.name)
                 setUsername(user.username)
+                setRoles(user.roles)
             }).catch(treat)
         }
     }, [id])
@@ -112,21 +122,34 @@ export default function UserPage() {
                         value={name}
                         onChange={event => setName(event.target.value)}
                     />
-                    <label>
-                        Roles:
-                        <select 
-                            name='SelectedRole'
-                            defaultValue={''}
-                            multiple={true}
-                        >
-                            <option value={roles}></option>
-                        </select> 
-                    </label>
                     <MyInput
                         label='Login'
                         value={username}
                         readOnly={id > 0}
                         onChange={event => setUsername(event.target.value)}
+                    />
+                    <MySelect
+                        label='Roles'
+                        multiple={true}
+                        rolesLista={rolesLista}
+                        value={roles}
+                        defaultValue={roles}
+                        onChange={e => {
+                            let rolesArray : string[] = [];
+                            const options = [e.target.selectedOptions];
+                            const optionArray = options.map(option => option);
+                            
+                            optionArray.forEach(function (elemento, chave) {
+                                console.log('entoru no foreach' , elemento , chave);
+                                for (let index = 0; index < elemento.length; index++) {
+                                    const element = elemento[index];
+                                    console.log(element.value);
+                                    rolesArray.push(element.value);
+                                }
+                            });
+                            console.log('array roles ->',rolesArray);
+                            setRoles(rolesArray);
+                        }}
                     />
                     <MyInput
                         label='Senha'
