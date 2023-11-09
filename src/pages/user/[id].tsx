@@ -13,6 +13,7 @@ import { Roles } from '@/model/roles'
 import { rolesService } from '@/services/roles.service'
 import RolesList from '@/components/roles-list'
 import MySelect from '../../components/select-multiple'
+import MySelectNextUi from '../../components/select-multiple-nextui'
 
 export default function UserPage() {
 
@@ -28,6 +29,14 @@ export default function UserPage() {
     const [username, setUsername] = React.useState('')
     const [password, setPassword] = React.useState('')
     const [passConfirm, setPassConfirm] = React.useState('')
+
+    const updateRole = (e : any) => {
+        let arrayRoles = e.split(",");
+        arrayRoles = arrayRoles.filter( (element : string ) => {
+            return element !== null && element !== undefined && element !== ''
+        })
+        setRoles(arrayRoles)
+    }
 
     React.useEffect(fetchRoles, [])
     function fetchRoles() {
@@ -128,28 +137,12 @@ export default function UserPage() {
                         readOnly={id > 0}
                         onChange={event => setUsername(event.target.value)}
                     />
-                    <MySelect
+                    
+                    <MySelectNextUi
                         label='Roles'
-                        multiple={true}
                         rolesLista={rolesLista}
-                        value={roles}
-                        defaultValue={roles}
-                        onChange={e => {
-                            let rolesArray : string[] = [];
-                            const options = [e.target.selectedOptions];
-                            const optionArray = options.map(option => option);
-                            
-                            optionArray.forEach(function (elemento, chave) {
-                                console.log('entoru no foreach' , elemento , chave);
-                                for (let index = 0; index < elemento.length; index++) {
-                                    const element = elemento[index];
-                                    console.log(element.value);
-                                    rolesArray.push(element.value);
-                                }
-                            });
-                            console.log('array roles ->',rolesArray);
-                            setRoles(rolesArray);
-                        }}
+                        roles={roles}
+                        handleResult={updateRole}
                     />
                     <MyInput
                         label='Senha'
